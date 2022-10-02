@@ -1,0 +1,30 @@
+{
+  "name": "projeto15-boardcamp",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "dev": "npx nodemon ./src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jansenck/projeto15-boardcamp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jansenck/projeto15-boardcamp/issues"
+  },
+  "homepage": "https://github.com/Jansenck/projeto15-boardcamp#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0"
+  }
+}
