@@ -16,6 +16,20 @@ async function listCategories(req, res){
     }
 }
 
+async function addCategory(req, res){
+
+    const { name } = req.body;
+    if(!name) return res.sendStatus(StatusCodes.BAD_REQUEST);
+
+    try {
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }   
+}
+
 export { 
-    listCategories 
-};
+    listCategories,
+    addCategory
+}
