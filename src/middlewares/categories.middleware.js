@@ -6,13 +6,12 @@ const categoriesSchema = joi.object({
     name: joi.string().empty().required()
 });
 
-
 async function categoriesValidation(req, res, next){
 
     const name = req.body?.name;
-    if(!name) return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    if(!name) return res.sendStatus(StatusCodes.BAD_REQUEST);
 
-    const isValidCategory = categoriesSchema.validate(req.body, {abortEarly: false});
+    const isValidCategory = categoriesSchema.validate({name}, {abortEarly: false});
 
     if(isValidCategory.error){
         const categoryError = isValidCategory.error.details.map(detail => detail.message);
