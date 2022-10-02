@@ -22,6 +22,8 @@ async function addCategory(req, res){
     if(!name) return res.sendStatus(StatusCodes.BAD_REQUEST);
 
     try {
+        connection.query(`INSERT INTO categories (name) VALUES ($1);`, [name]);
+        return res.sendStatus(StatusCodes.CREATED);
         
     } catch (error) {
         console.error(error.message);

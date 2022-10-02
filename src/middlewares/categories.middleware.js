@@ -25,9 +25,7 @@ async function categoriesValidation(req, res, next){
         );
         
         if(categoryAlreadyExists.rows.length !== 0) return res.sendStatus(StatusCodes.CONFLICT);
-
-        connection.query(`INSERT INTO categories (name) VALUES ($1);`, [name]);
-        return res.sendStatus(StatusCodes.CREATED);
+        next();
 
     } catch (error) {
         console.error(error.message);
