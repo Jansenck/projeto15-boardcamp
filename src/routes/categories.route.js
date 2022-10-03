@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import { listCategories, addCategory } from "../controllers/categories.controller.js";
 import categoriesValidation from "../middlewares/categories.middleware.js";
 

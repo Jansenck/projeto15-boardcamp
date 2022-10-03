@@ -15,7 +15,7 @@ async function categoriesValidation(req, res, next){
 
     if(isValidCategory.error){
         const categoryError = isValidCategory.error.details.map(detail => detail.message);
-        return res.send(categoryError).status(StatusCodes.UNPROCESSABLE_ENTITY);
+        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(categoryError);
     }
 
     try {
