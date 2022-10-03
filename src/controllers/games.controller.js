@@ -1,6 +1,18 @@
 import { StatusCodes } from "http-status-codes";
 import connection from "../database/database.js";
 
+async function listGames(req, res){
+
+    try {
+        const games = await connection.query(`SELECT * FROM games`);
+        return res.send(games.rows).status(StatusCodes.OK);
+
+    } catch (error) {
+        console.error(error.message);
+        return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
 async function addGame(req, res){
     const gameInfos = req.body;
     if(!gameInfos) return res.sendStatus(StatusCodes.BAD_REQUEST);
@@ -21,7 +33,7 @@ async function addGame(req, res){
     }
 }
 
-export { addGame };
+export { addGame, listGames };
 
 
   

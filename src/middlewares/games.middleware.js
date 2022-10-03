@@ -30,7 +30,7 @@ async function gamesValidation(req, res, next){
 
     try {
         const game = await connection.query(`SELECT * FROM games WHERE name = $1`, [gameName]);
-        if(game.rows.length !== 0) return res.sendStatus(StatusCodes.BAD_REQUEST);
+        if(game.rows.length !== 0) return res.sendStatus(StatusCodes.CONFLICT);
         next();
 
     } catch (error) {
