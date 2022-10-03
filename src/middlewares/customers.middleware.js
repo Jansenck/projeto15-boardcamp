@@ -34,4 +34,35 @@ async function validateCustomers(req, res, next){
     }
 }
 
-export default validateCustomers;
+async function validateUpdatingCustomers(req, res, next){
+
+    const id = req.params?.id;
+    const customerInfos = req.body;
+
+    if(!id || !customerInfos) return res.sendStatus(StatusCodes.BAD_REQUEST);
+
+    const { name, phone, cpf, birthday } = req.body;
+    const isValidCustomer = customerSchema.validate({name, phone, cpf, birthday});
+
+    if(isValidCustomer.error){
+        const customerError = isValidCustomer.error.details.map(detail => detail.message);
+        return res.status(StatusCodes.BAD_REQUEST).send(customerError);
+    }
+
+    try {
+
+        const customerExists = await connection.query(`SELECT * FROM customers WHERE id = $1;`, [id]);
+        if(customerExists.rows.length === 0) return res.sendStatus(StatusCodes.BAD_REQUEST);
+
+        const customer = await connection.query(`SELECT * FROM customers WHERE cpf = $1;`, [cpf]);
+        if(customer.rows.length === 0) return res.sendStatus(StatusCodes.BAD_REQUEST);
+
+        next();
+        
+    } catch (error) {
+        console.error(error.message);
+        return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
+export { validateCustomers, validateUpdatingCustomers };
