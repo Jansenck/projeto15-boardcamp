@@ -12,6 +12,27 @@ async function addRentals(req, res){
 
         const currentDate = new Date().toISOString().split("T", 1)[0];
 
+        const customer = await connection.query(
+            `SELECT * FROM customers WHERE id = $1;`, 
+            [customerId]
+        );
+
+        const game = await connection.query(
+            `SELECT * FROM games WHERE id = $1;`, 
+            [gameId]
+        );
+
+        const conditionsForRent = [
+            customer.rows.length === 0, 
+            game.rows.length === 0, 
+            daysRented  <= 0,
+            game.rows[0].stockTotal <= 0
+        ];
+
+        if(conditionsForRent.includes(true)){
+            return res.sendStatus(StatusCodes.BAD_REQUEST)
+        };
+
         const gamePricePerDay = await connection.query(
             `SELECT games."pricePerDay" FROM games WHERE id = $1;`, 
             [gameId]
@@ -19,7 +40,7 @@ async function addRentals(req, res){
 
         const { pricePerDay } = gamePricePerDay.rows[0];
      
-        const rentals = await connection.query(
+        await connection.query(
             `INSERT INTO rentals (
                 "customerId", 
                 "gameId", 
@@ -42,6 +63,23 @@ async function addRentals(req, res){
     }
 }
 
+async function listRentals(req, res){
+
+    try {
+
+        const rentals = await connection.query(
+            `SELECT * FROM games JOIN customers ON customers.id = rentals."customerId" JOIN games ON games.id = rentals."gameId";`
+        );
+
+        const game = await connection.query(`SELECT games.*,  FROM games WHERE id = $1`, [rentals.gameId]);
+
+        return res.status(StatusCodes.OK).send([rentals.rows[0], game.rows[0]]);
+
+    } catch (error) {
+        console.error(error.message);
+        return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
 
 
-export { addRentals };
+export { addRentals, listRentals };
