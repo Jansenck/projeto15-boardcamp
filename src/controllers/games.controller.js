@@ -4,8 +4,8 @@ import connection from "../database/database.js";
 async function listGames(req, res){
 
     try {
-        const games = await connection.query(`SELECT * FROM games`);
-        return res.send(games.rows).status(StatusCodes.OK);
+        const games = await connection.query(`SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id = games."categoryId";`);
+        return res.status(StatusCodes.OK).send(games.rows);
 
     } catch (error) {
         console.error(error.message);
@@ -34,8 +34,3 @@ async function addGame(req, res){
 }
 
 export { addGame, listGames };
-
-
-  
-  
-  
