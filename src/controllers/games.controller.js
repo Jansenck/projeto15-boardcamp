@@ -3,7 +3,14 @@ import connection from "../database/database.js";
 
 async function listGames(req, res){
 
+    const { name } = req.query;
+
     try {
+
+        if(name !== undefined){
+            const game = await connection.query(`SELECT * FROM games WHERE games.name LIKE $1;`, [name+'%']);
+            return res.send(game.rows).status(StatusCodes.OK);
+        }
         const games = await connection.query(`SELECT games.*, categories.name AS "categoryName" FROM games JOIN categories ON categories.id = games."categoryId";`);
         return res.status(StatusCodes.OK).send(games.rows);
 
